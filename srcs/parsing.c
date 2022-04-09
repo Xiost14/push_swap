@@ -1,71 +1,93 @@
-#include "push_swap.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parsing.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: thsamina <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/04/09 11:03:56 by thsamina          #+#    #+#             */
+/*   Updated: 2022/04/09 11:03:57 by thsamina         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-void			third_parsing(t_stack **a, t_stack **b, int nbr, t_var *v)
+#include "../header/push_swap.h"
+
+long int	ft_atoi(char *str, int *j)
 {
-	t_stack		*tmp;
+	int			i;
+	int			sign;
+	long int	nb;
 
-	tmp = NULL;
-	if (nbr == 7 && list_size(*b) > 1)
+	i = 0;
+	sign = 1;
+	nb = 0;
+	while (ft_is_space(str[i]))
+		i++;
+	if (str[i] == '-')
 	{
-		ft_putstr_fd("sb\n", v->fd);
-		op_s_stk(b);
+		sign = -1;
+		i++;
 	}
-	else if (nbr == 8 && list_size(*a) > 1)
+	while (ft_isdigit(str[i]))
 	{
-		ft_putstr_fd("sa\n", v->fd);
-		op_s_stk(a);
+		nb = nb * 10 + str[i] - 48;
+		i++;
 	}
+	*j = *j + i;
+	return (nb * sign);
 }
 
-void			second_parsing(t_stack **a, t_stack **b, int nbr, t_var *v)
+void	get_len(t_data *d, int ac, char **av, int i)
 {
-	t_stack *tmp;
+	int	j;
 
-	tmp = NULL;
-	if (nbr == 4)
+	j = 0;
+	d->len = 0;
+	while (i < ac)
 	{
-		ft_putstr_fd("pa\n", v->fd);
-		op_p_stk(b, a, tmp);
-		free(tmp);
+		j = 0;
+		while (av[i][j] && is_invalid(av[i]) == 0)
+		{
+			if (is_invalid(&av[i][j]))
+				ft_quit(d);
+			if (av[i][j] == '-')
+				j++;
+			if (ft_isdigit(av[i][j]))
+				d->len++;
+			while (ft_isdigit(av[i][j]))
+				j++;
+			while (ft_is_space(av[i][j]))
+				j++;
+		}
+		i++;
 	}
-	else if (nbr == 5 && list_size(*b) > 1)
-	{
-		ft_putstr_fd("rb\n", v->fd);
-		op_r_stk(b);
-		free(tmp);
-	}
-	else if (nbr == 6 && list_size(*b) > 1)
-	{
-		ft_putstr_fd("rrb\n", v->fd);
-		op_rr_stk(b,tmp);
-		free(tmp);
-	}
-	else
-		third_parsing(a, b, nbr, v);
+	d->len_a = d->len;
+	d->len_b = 0;
 }
 
-void			first_parsing(t_stack **a, t_stack **b, int nbr, t_var *v)
+void	parser(t_data *d, int ac, char **av)
 {
-	t_stack		*tmp;
+	int	i;
+	int	j;
+	int	k;
 
-	tmp = NULL;
-	if (nbr == 1)
+	i = 1;
+	j = 0;
+	k = 0;
+	while (i < ac)
 	{
-		ft_putstr_fd("pb\n", v->fd);
-		op_p_stk(a, b, tmp);
-		free(tmp);
+		j = 0;
+		while (av[i][j] && is_invalid(av[i]) == 0 && k < d->len)
+		{
+			if (is_invalid(&av[i][j]))
+				ft_quit(d);
+			d->a[k] = ft_atoi(&av[i][j], &j);
+			if (d->a[k] < -2147483648 || d->a[k] > 2147483647)
+				ft_quit(d);
+			while (ft_is_space(av[i][j]))
+				j++;
+			k++;
+		}
+		i++;
 	}
-	else if (nbr == 2)
-	{
-		ft_putstr_fd("ra\n", v->fd);
-		op_r_stk(a);
-		free(tmp);
-	}
-	else if (nbr == 3 && list_size(*a) > 1)
-	{
-		ft_putstr_fd("rra\n", v->fd);
-		op_rr_stk(a, tmp);
-	}
-	else
-		second_parsing(a, b, nbr, v);
 }

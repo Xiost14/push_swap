@@ -1,46 +1,33 @@
-MAME	=	push_swap
-CC		=	gcc
-FLAGS	=	-Wall -Wextra -Werror
-OBJS	=	${SRC:.c=.o}
-HEAD	=	header/
+NAME	=	push_swap
+CC		=	clang
+FLAGS	=	-Wall -Werror -Wextra
+INCS	=	$(addprefix header/, push_swap.h)
+OBJS	=	$(SRCS:.c=.o)
 
-SRC		=	srcs/main.c				\
-			srcs/bigger.c			\
-			srcs/check.c			\
-			srcs/fill.c				\
-			srcs/find.c				\
-			srcs/ft_abs.c			\
-			srcs/ft_free_array.c	\
-			srcs/ft_free.c			\
-			srcs/ft_strcmp.c		\
-			srcs/initialisation.c	\
-			srcs/list_utils_1.c		\
-			srcs/list_utils_2.c		\
-			srcs/norm.c				\
-			srcs/operateur_p.c		\
-			srcs/operateur_r.c		\
-			srcs/operateur_s.c		\
+SRCS	=	srcs/main.c				\
+			srcs/error.c			\
+			srcs/ft_utils.c			\
+			srcs/get_big.c			\
+			srcs/operateur_a.c		\
+			srcs/operateur_b.c		\
+			srcs/operateur_utils.c	\
 			srcs/parsing.c			\
-			srcs/ps_atoll.c			\
-			srcs/short.c			\
-			srcs/ft_putstr_fd.c		\
-			srcs/ft_strlen.c		\
-			srcs/ft_strdup.c		\
-			srcs/ft_split.c			\
-			srcs/ft_bzero.c			\
-			srcs/ft_putchar_fd.c	\
-			srcs/ft_isalpha.c
-.c.o:
-		${CC} ${FLAGS} -I ${HEAD} -c $< -o ${<:.c=.o}
+			srcs/sort_big.c			\
+			srcs/sort_big_2.c		\
+			srcs/sort_small.c
 
-all:		${OBJS}
-		${CC} ${FLAGS} -o $@ $^
-clean:		
-		${RM} ${OBJS}
+all: $(NAME)
 
-fclean:		clean
-		${RM} ${NAME}
+$(NAME): ${OBJS} $(INCS)
+	$(CC) $(FLAGS) -I header -o $(NAME) $(OBJS)
 
-re:			fclean all
+%.o: %.c $(INCS)
+	$(CC) $(FLAGS) -I header -c $< -o $@
 
-.PHONY:		all clean fclean re
+clean:
+	rm -f ${OBJS}
+
+fclean: clean
+	rm -f ${NAME}
+
+re: fclean allg

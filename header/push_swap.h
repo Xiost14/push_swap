@@ -1,87 +1,86 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   push_swap.h                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: thsamina <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/04/09 11:59:53 by thsamina          #+#    #+#             */
+/*   Updated: 2022/04/09 11:59:54 by thsamina         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef PUSH_SWAP_H
 # define PUSH_SWAP_H
 
+# include <stdlib.h>
 # include <stdio.h>
 # include <unistd.h>
-# include <stdlib.h>
 # include <string.h>
-# include <limits.h>
-# include <ctype.h>
+# include <sys/types.h>
+# include <sys/errno.h>
 
-typedef struct s_stack
+typedef struct s_data	t_data;
+struct			s_data
 {
-		int				nbr;
-		struct	s_stack	*next;
-		struct	s_stack	*prv;
-}	t_stack;
+	long	min;
+	long	max;
+	long	chunks;
+	long	*med;
+	long	*med_len;
+	long	index_min;
+	long	index_max;
+	long	moves_min;
+	long	moves_max;
+	long	dir_min;
+	long	dir_max;
+	long	index_selected;
+	long	moves_selected;
+	long	dir_selected;
+	long	len;
+	long	to_fill;
+	long	*sorted;
+	long	len_a;
+	long	len_b;
+	long	*a;
+	long	*b;
+	long	*a_copy;
+	long	*b_copy;
+};
 
-typedef struct s_var
-{
-		char			*line;
-		char			**split;
-		char			**av;
-		int				ac;
-		int				len;
-		int				print;
-		int				fd;
-		t_stack			*a;
-		t_stack			*b;
-}	t_var;
-
-void		ft_bzero(void *s, size_t n);
-char		**ft_split(const char *str, char cara);
-char		*ft_strdup(const char *old_string);
-int			ft_isalpha(int character);
-size_t		ft_strlen(const char *string);
-void		sort_bigger(t_stack **a, t_stack **b, int len, t_var *v);
-void		sort_bigger_third(t_stack **a, t_stack **b, int max, t_var *v);
-void		sort_bigger_second(t_stack **a, t_stack **b, int len, t_var *v);
-void		sort_bigger_first(t_stack **a, t_stack **b, int len, t_var *v);
-int			check_pivot(t_stack *a, int pvt, int flag);
-int			check_sort(t_stack **a, int len);
-void		check_dup(char **av);
-void		check_nbr(char **av);
-int			check_overf(char *str);
-char		**fill_arg(t_var *v, int ac, char **av);
-t_stack		*fill_list(t_var *v, char **split, t_stack *tmp);
-t_stack		*find_bottom(t_stack *a);
-int			find_min(t_stack *stk);
-int			find_max(t_stack *stk);
-int			find_index(t_stack *stk, int num, int flag);
-int			find_pivot(t_stack *stk);
-int			ft_abs(float num);
-void		ft_free_array(char **array);
-void		ft_free_arg(char **arg);
-int			ft_strcmp(char *s1, char *s2);
-t_var		*init_var(t_var *v);
-void		free_stk(t_stack **stk);
-int			list_size(t_stack *a);
-void		add_list_front(t_stack **top, t_stack *new);
-void		add_list_back(t_stack **first, t_stack *new);
-void		add_list_back_r(t_stack **top);
-int			ft_list_nbr(t_stack **stk, int index);
-t_stack		*ft_list_sort(t_stack *stk);
-void		ft_list_swap(t_stack *x, t_stack *y);
-t_stack		*ft_lst_dup(t_stack *stk);
-void		ft_exit(char *str, int err);
-void		sort_big_norm_1(t_stack **a, t_stack **b, t_var *v, int pvt);
-void		sort_big_norm_2(t_stack **a, t_stack **b, t_var *v, int pvt);
-void		op_p_stk(t_stack **a, t_stack **b, t_stack *tmp);
-void		op_r_stk(t_stack **top);
-void		op_rr_stk(t_stack **top, t_stack *tmp);
-void		op_rr_bottom(t_stack **top);
-t_stack		*op_rr_swap(t_stack *top, t_stack *tmp);
-void		op_s_stk(t_stack **top);
-void		first_parsing(t_stack **a, t_stack **b, int nbr, t_var *v);
-void		second_parsing(t_stack **a, t_stack **b, int nbr, t_var *v);
-void		third_parsing(t_stack **a, t_stack **b, int nbr, t_var *v);
-long long	ps_atoll(char *s);
-void		sort_short(t_stack **a, t_stack **b, int len, t_var *v);
-void		sort_short_short(t_stack **a, t_stack **b, int len, t_var *v);
-void		sort_short_3(t_stack **a, t_stack **b, t_var *v, int c);
-void		sort_short_big(t_stack **a, t_stack **b, int len, t_var *v);
-void		sort_short_big_norm(t_stack **a, t_stack **bb, t_var *v, int min);
-void		ft_putstr_fd(char *s, int fd);
-void		ft_putchar_fd(char c, int fd);
+int		check_argvs(int ac, char **av);
+void	get_len(t_data *d, int ac, char **av, int i);
+void	parser(t_data *d, int ac, char **av);
+void	check_dub(t_data *d);
+void	get_min_max(t_data *d);
+int		is_invalid(char *str);
+void	ft_swap(long *a, long *b);
+void	ft_putstr_fd(char *s, int fd);
+int		ft_isdigit(int n);
+int		ft_is_space(char c);
+void	sorted_push_min_first(t_data *d);
+void	copy_stacks(t_data *d);
+void	sort_two(t_data *d);
+void	sort_three(t_data *d);
+void	sort_four(t_data *d);
+void	sort_five2(t_data *d);
+void	sort_five(t_data *d);
+void	sort_6_or_more(t_data *d);
+void	get_a_sorted(t_data *d);
+void	op_sa(t_data *d);
+void	op_sb(t_data *d);
+void	op_pa(t_data *d);
+void	op_pb(t_data *d);
+void	op_rrb(t_data *d);
+void	op_rra(t_data *d);
+void	op_rb(t_data *d);
+void	op_ra(t_data *d);
+void	ft_quit(t_data *d);
+void	get_chunks(t_data *d);
+void	move_chunk_into_b(t_data *d, long n, long i);
+void	move_chunk_into_a_2(t_data *d);
+void	get_index_min_max_2(t_data *d, long *min, long *max, long i);
+void	get_nb_moves(t_data *d);
+void	free_data(t_data *d);
 
 #endif
