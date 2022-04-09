@@ -36,9 +36,6 @@ void	get_index_min_max(t_data *d, long min, long max)
 
 void	move_chunk_into_a(t_data *d, long *push)
 {
-	long	i;
-
-	i = 0;
 	while (d->len_b)
 	{
 		get_index_min_max(d, 0, 0);

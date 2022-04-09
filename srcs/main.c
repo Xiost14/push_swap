@@ -9,7 +9,7 @@
 /*   Updated: 2022/04/09 11:01:27 by thsamina         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
+#include <stdio.h>
 #include "../header/push_swap.h"
 
 int	is_sorted(t_data *d)
